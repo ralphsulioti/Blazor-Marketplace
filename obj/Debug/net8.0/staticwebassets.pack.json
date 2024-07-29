@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\Marketplace.bundle.scp.css",
+      "PackagePath": "staticwebassets\\Marketplace.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
+      "Id": "C:\\Users\\ralph\\Documents\\VSCode\\sampleBlazor\\Marketplace\\Marketplace\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Marketplace.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Marketplace.props",
+      "PackagePath": "build\\Marketplace.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Marketplace.props",
+      "PackagePath": "buildMultiTargeting\\Marketplace.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Marketplace.props",
+      "PackagePath": "buildTransitive\\Marketplace.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

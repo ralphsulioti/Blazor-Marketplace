@@ -1,0 +1,97 @@
+/* Container styles */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    color: #3e5fa7;
+    font-size: 3em;
+}
+
+h2 {
+    color: #3498db;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+/* Listing container styles */
+.listing-container {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Listing item styles */
+.listing-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    margin-bottom: 10px;
+    border: 2px solid #3e5fa7;
+    border-radius: 10px;
+    background-color: #ecf0f1;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.listing-item:hover {
+    transform: scale(1.01);
+    background-color: #5d75b6;
+    color: #fff;
+}
+
+/* Listing details styles */
+.listing-details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Listing name styles */
+.listing-name {
+    font-weight: bold;
+    color: #0f151b;
+    font-size: 1.5em;
+}
+
+/* Listing price styles */
+.listing-price {
+    font-weight: bold;
+    color: #27ae60;
+    font-size: 1.5em;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 5px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}
+
+.purchase-button {
+    background-color: #5d75b6;
+    color: white;
+    cursor: pointer; 
+    padding: 10px 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+.purchase-button:hover {
+    background-color: #5d75b6;
+}
+
+.add-listing {
+    text-align: right;
+}

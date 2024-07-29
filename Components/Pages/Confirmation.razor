@@ -1,0 +1,14 @@
+@page "/confirmation/{listingName}"
+
+<PageTitle>Confirmation</PageTitle>
+
+<div class="confirmation-container">
+    <h1>Congratulations!</h1>
+    <h3>You have purchased listing: @listingName.</h3>
+    <a href="/">Back to Home</a>
+</div>
+
+@code {
+    [Parameter]
+    public string listingName { get; set; }
+}
