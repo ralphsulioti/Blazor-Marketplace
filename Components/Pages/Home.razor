@@ -1,6 +1,7 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
+@inject AppDbContext DbContext
 
 <PageTitle>Home</PageTitle>
 
@@ -60,23 +61,20 @@
 @code {
     private List<Listing> listings = new();
     private Listing currListing;
-    // Sets new listing id value, already have 6 listings so starts at 6 not 0
-    private int count = 6;
     private bool toDelete = false;
     private string Name;
     private int Price;
 
     protected override void OnInitialized()
     {
-        listings.AddRange(new List<Listing>
+        try
         {
-            new Listing(1, "Honda Civic", 15000),
-            new Listing(2, "Toyota Corolla", 10000),
-            new Listing(3, "Toy car", 250),
-            new Listing(4, "Mountain Bike", 300),
-            new Listing(5, "Spirit Island", 60),
-            new Listing(6, "Spirit Island: Branch and Claw Expansion", 40)
-        });
+            listings = DbContext.Listings.ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading listings: {ex.Message}");
+        }
     }
 
     private void cancelSelection() {
@@ -101,13 +99,23 @@
 
     private void deleteListing()
     {
-        if (currListing != null)
+        try
         {
-            listings.Remove(currListing);
-            currListing = null;
+            if (currListing != null)
+            {
+                DbContext.Listings.Remove(currListing);
+                DbContext.SaveChanges();
+                listings.Remove(currListing);
+                currListing = null;
+            }
+            
+            toDelete = false;
         }
-        
-        toDelete = false;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting listing: {ex.Message}");
+            Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
+        }
     }
 
     private void confirmPurchase()
@@ -121,12 +129,26 @@
     }
 
     private void addListing() {
-        if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
-            var newListing = new Listing(++count, Name, Price);
-            listings.Add(newListing);
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
+                var newListing = new Listing
+                {
+                    name = Name,
+                    price = Price
+                };
+                DbContext.Listings.Add(newListing);
+                DbContext.SaveChanges();
+                listings.Add(newListing);
 
-            Name = string.Empty;
-            Price = 0;
+                Name = string.Empty;
+                Price = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding listing: {ex.Message}");
+            Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
         }
     }
 }
