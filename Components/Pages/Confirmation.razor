@@ -1,14 +1,18 @@
-@page "/confirmation/{listingName}"
+@page "/confirmation/{listingName}/{listingEmail}"
 
 <PageTitle>Confirmation</PageTitle>
 
 <div class="confirmation-container">
     <h1>Congratulations!</h1>
-    <h3>You have purchased listing: @listingName.</h3>
+    <h2>You are interested in purchasing listing: @listingName.</h2>
+    <h3>Please contact the listing owner at @listingEmail to express your interest</h3>
     <a href="/">Back to Home</a>
 </div>
 
 @code {
     [Parameter]
     public string listingName { get; set; }
+
+    [Parameter]
+    public string listingEmail {get; set; }
 }
