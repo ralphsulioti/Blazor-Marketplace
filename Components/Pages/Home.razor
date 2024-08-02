@@ -2,62 +2,71 @@
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @inject AppDbContext DbContext
+@inject AuthStatus AuthService
 
 <PageTitle>Home</PageTitle>
 
-<div>
-    <h1>Marketplace</h1>
-    <h2>Listings:</h2>
-
-    <!-- Giving inputs for adding a listing -->
+@if (!AuthService.IsAuthenticated)
+{
+    <p>Redirecting to login...</p>
+    NavigationManager.NavigateTo("/login");
+}
+else
+{
     <div>
-        <input placeholder="Name" @bind="Name">
-        <input placeholder="Price" type="number" @bind="Price">
-        <input placeholder="Email" @bind="Email">
-        <button @onclick="addListing" class="add-listing">Add Listing</button>
-    </div>
+        <h1>Marketplace</h1>
+        <h2>Listings:</h2>
 
-    <!-- Displaying all listings -->
-    <ul class="listing-container">
-        @if (listings != null && listings.Any())
-        {
-            @foreach (var listing in listings)
+        <!-- Giving inputs for adding a listing -->
+        <div>
+            <input placeholder="Name" @bind="Name">
+            <input placeholder="Price" type="number" @bind="Price">
+            <input placeholder="Email" @bind="Email">
+            <button @onclick="addListing" class="add-listing">Add Listing</button>
+        </div>
+
+        <!-- Displaying all listings -->
+        <ul class="listing-container">
+            @if (listings != null && listings.Any())
             {
-                <li class="listing-item">
-                    <div class="listing-details">
-                        <span class="listing-name">@listing.name</span>
-                        <span class="listing-price">$@(listing.price).00</span>
-                    </div>
-                    <!-- Giving option for purchasing or deleting each listing -->
-                    <button @onclick="() => purchaseListing(listing)" class="purchase-button">Purchase</button>
-                    <button @onclick="() => removeListing(listing)" class="delete-button">Delete</button>
-                </li>
+                @foreach (var listing in listings)
+                {
+                    <li class="listing-item">
+                        <div class="listing-details">
+                            <span class="listing-name">@listing.name</span>
+                            <span class="listing-price">$@(listing.price).00</span>
+                        </div>
+                        <!-- Giving option for purchasing or deleting each listing -->
+                        <button @onclick="() => purchaseListing(listing)" class="purchase-button">Purchase</button>
+                        <button @onclick="() => removeListing(listing)" class="delete-button">Delete</button>
+                    </li>
+                }
             }
-        }
-        else
+            else
+            {
+                <li>No Listings Available</li>
+            }
+        </ul>
+
+        <!-- Confirm Delete -->
+        @if (currListing != null && toDelete == true)
         {
-            <li>No Listings Available</li>
+            <p> Selected listing for deletion: @currListing.name</p>
+            <p>Are you sure you want to delete @currListing.name?</p>
+            <button @onclick="deleteListing" class="delete-button">Confirm</button>
+            <button @onclick="cancelSelection" class="purchase-button">Cancel</button>
         }
-    </ul>
 
-    <!-- Confirm Delete -->
-    @if (currListing != null && toDelete == true)
-    {
-        <p> Selected listing for deletion: @currListing.name</p>
-        <p>Are you sure you want to delete @currListing.name?</p>
-        <button @onclick="deleteListing" class="delete-button">Confirm</button>
-        <button @onclick="cancelSelection" class="purchase-button">Cancel</button>
-    }
-
-    <!-- Confirm Purchase  -->
-    @if (currListing != null && toDelete == false)
-    {
-        <p> Selected listing for purchase: @currListing.name</p>
-        <p>Are you sure you want to purchase @currListing.name?</p>
-        <button @onclick="confirmPurchase" class="purchase-button">Confirm</button>
-        <button @onclick="cancelSelection" class="delete-button">Cancel</button>
-    }
-</div>
+        <!-- Confirm Purchase  -->
+        @if (currListing != null && toDelete == false)
+        {
+            <p> Selected listing for purchase: @currListing.name</p>
+            <p>Are you sure you want to purchase @currListing.name?</p>
+            <button @onclick="confirmPurchase" class="purchase-button">Confirm</button>
+            <button @onclick="cancelSelection" class="delete-button">Cancel</button>
+        }
+    </div>
+}
 
 @code {
     private List<Listing> listings = new();
