@@ -1,0 +1,55 @@
+@using Microsoft.EntityFrameworkCore
+@using Marketplace.Components
+@inject NavigationManager NavigationManager
+@inject AppDbContext DbContext
+
+@page "/login"
+
+<h3>Login</h3>
+
+<input @bind="Username" placeholder="Username" />
+<input @bind="Password" placeholder="Password" type="password" />
+<input @bind="Email" placeholder="Email"/>
+<button @onclick="HandleLogin">Login</button>
+<button @onclick="HandleRegister">Create Account</button>
+
+@code {
+    private string Username {get; set; }
+    private string Password {get; set; }
+    private string Email {get; set; }
+    
+    private void HandleRegister() {
+        // Check if a user with the same username already exists
+        if (DbContext.Users.Any(u => u.username == Username)) {
+            Console.WriteLine("Username already in use, pick a different one");
+        }
+        else if (DbContext.Users.Any(u => u.email == Email)) {
+            Console.WriteLine("Email already in use, pick a different one.");
+        }
+        else {
+            var newUser = new User{
+                username = Username,
+                password = Password,
+                email = Email
+            };
+            DbContext.Users.Add(newUser);
+            DbContext.SaveChanges();
+            
+            Username = string.Empty;
+            Password = string.Empty;
+            Email = string.Empty;
+
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private void HandleLogin() {
+        bool credentialsValid = DbContext.Users.Any(u => u.username == Username && u.password == Password);
+        if (credentialsValid) {
+            NavigationManager.NavigateTo("/");
+        }
+        else {
+            Console.WriteLine("Incorrect username or password. Try again.");
+        }
+    }
+}
