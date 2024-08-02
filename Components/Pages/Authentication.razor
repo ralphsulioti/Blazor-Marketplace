@@ -1,0 +1,75 @@
+@using Microsoft.EntityFrameworkCore
+@using Marketplace.Components
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject AppDbContext DbContext
+@inject AuthStatus AuthStatus
+
+@page "/login"
+
+<h3>Login</h3>
+
+<input placeholder="Username" @bind="Username" />
+<input placeholder="Password" type="password" @bind="Password" />
+<input placeholder="Email Address" @bind="Email"/>
+<button @onclick="HandleLogin" class="purchase-button">Login</button>
+<button @onclick="HandleRegister" class="purchase-button">Create Account</button>
+
+@code {
+    //private List<User> users = new();
+    private string Username { get; set; }
+    private string Password { get; set; }
+    private string Email { get; set; }
+
+
+    private void HandleRegister() {
+        Console.WriteLine($"Username: {Username}, Email: {Email}");
+        try {
+            //if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)) {
+                //if (DbContext.Users.Any(u => u.username == Username)) {
+                  //  Console.WriteLine("Username already in use, pick a different one");
+                //}
+                //else if (DbContext.Users.Any(u => u.email == Email)) {
+                //    Console.WriteLine("Email already in use, pick a different one.");
+                //}
+                //else {
+                    var newUser = new User {
+                        username = Username,
+                        password = Password,
+                        email = Email
+                    };
+                    DbContext.Users.Add(newUser);
+                    DbContext.SaveChanges();
+                    //users.Add(newUser);
+                    
+                    Username = string.Empty;
+                    Password = string.Empty;
+                    Email = string.Empty;
+
+                    NavigationManager.NavigateTo("/login");
+                //}
+            //}
+        }
+        catch (Exception ex) {
+            // Log the exception (e.g., to a file or console)
+            Console.WriteLine($"Error creating user: {ex.Message}");
+        }
+    }
+
+    private void HandleLogin() {
+        try {
+            bool credentialsValid = DbContext.Users.Any(u => u.username == Username && u.password == Password);
+            if (credentialsValid) {
+                AuthStatus.Login();
+                NavigationManager.NavigateTo("/");
+            }
+            else {
+                Console.WriteLine("Incorrect username or password. Try again.");
+            }
+        }
+        catch (Exception ex) {
+            // Log the exception (e.g., to a file or console)
+            Console.WriteLine($"Error during login: {ex.Message}");
+        }
+    }
+}
