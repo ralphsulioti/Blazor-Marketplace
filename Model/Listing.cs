@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 public class Listing {
     // Could also add a categories data member 
     // and include a drop down in HTML such that the user has to 
@@ -6,6 +8,7 @@ public class Listing {
     public int id {get; set;}
     public string name {get; set;}
     public int price {get; set;}
+    [Required]
     public User user {get; set;}
 
     public Listing() {

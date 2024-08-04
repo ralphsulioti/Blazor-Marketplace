@@ -3,6 +3,8 @@
 @inject NavigationManager NavigationManager
 @inject AppDbContext DbContext
 @inject AuthStatus AuthService
+@using Microsoft.EntityFrameworkCore
+
 
 <PageTitle>Home</PageTitle>
 
@@ -77,18 +79,20 @@ else
     private bool toDelete = false;
     private string Name;
     private int Price;
+    private bool Purchased = false;
 
     protected override void OnInitialized()
+{
+    try
     {
-        try
-        {
-            listings = DbContext.Listings.ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading listings: {ex.Message}");
-        }
+        listings = DbContext.Listings.Include(l => l.user).ToList();
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error loading listings: {ex.Message}");
+    }
+}
+
 
     private void cancelSelection() {
         currListing = null;
@@ -102,6 +106,7 @@ else
 
     private void purchaseListing(Listing listing) {
         findListing(listing);
+        Console.WriteLine(currListing.user);
         toDelete = false;
     }
 
@@ -114,6 +119,12 @@ else
     {
         try
         {
+            if (Purchased) {
+                DbContext.Listings.Remove(currListing);
+                DbContext.SaveChanges();
+                listings.Remove(currListing);
+                Purchased = false;
+            }
             if (currListing != null && currListing.user == AuthService.currUser)
             {
                 DbContext.Listings.Remove(currListing);
@@ -131,46 +142,70 @@ else
     }
 
     private void confirmPurchase()
+{
+    try
     {
-        try
+        Console.WriteLine(currListing.user);
+        if (currListing != null)
         {
-            if (currListing != null)
+            if (currListing.user != null)
             {
                 var listingName = currListing.name;
                 var listingEmail = currListing.user.email;
                 NavigationManager.NavigateTo($"/confirmation/{listingName}/{listingEmail}");
+                Purchased = true;
                 deleteListing();
             }
-        }
-        catch (Exception ex) {
-            Console.WriteLine($"Error confirming purchase: {ex.Message}");
-        }
-    }
-
-    private void addListing() {
-        try
-        {
-            if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
-                var newListing = new Listing
-                {
-                    name = Name,
-                    price = Price,
-                    user = AuthService.currUser
-                };
-                DbContext.Listings.Add(newListing);
-                DbContext.SaveChanges();
-                listings.Add(newListing);
-
-                Name = string.Empty;
-                Price = 0;
+            else
+            {
+                Console.WriteLine("Error: The listing has no associated user.");
             }
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"Error adding listing: {ex.Message}");
-            Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
+            Console.WriteLine("Error: No listing selected.");
         }
     }
+    catch (Exception ex) {
+        Console.WriteLine($"Error confirming purchase: {ex.Message}");
+    }
+}
+
+
+    private void addListing() {
+    try
+    {
+        if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
+            // Retrieve the current user from the database to ensure it's the same instance
+            var user = DbContext.Users.FirstOrDefault(u => u.id == AuthService.currUser.id);
+            if (user == null)
+            {
+                Console.WriteLine("Error: Current user not found.");
+                return;
+            }
+
+            var newListing = new Listing
+            {
+                name = Name,
+                price = Price,
+                user = user
+            };
+
+            DbContext.Listings.Add(newListing);
+            DbContext.SaveChanges();
+            listings.Add(newListing);
+
+            Name = string.Empty;
+            Price = 0;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error adding listing: {ex.Message}");
+        Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
+    }
+}
+
 
     private void logout() {
         AuthService.Logout();
