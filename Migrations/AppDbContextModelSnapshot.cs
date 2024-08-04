@@ -28,10 +28,6 @@ namespace Marketplace.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -39,7 +35,12 @@ namespace Marketplace.Migrations
                     b.Property<int>("price")
                         .HasColumnType("int");
 
+                    b.Property<int>("userid")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
+
+                    b.HasIndex("userid");
 
                     b.ToTable("Listings");
                 });
@@ -67,6 +68,17 @@ namespace Marketplace.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Listing", b =>
+                {
+                    b.HasOne("User", "user")
+                        .WithMany()
+                        .HasForeignKey("userid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

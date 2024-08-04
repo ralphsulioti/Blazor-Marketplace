@@ -21,7 +21,6 @@ else
         <div>
             <input placeholder="Name" @bind="Name">
             <input placeholder="Price" type="number" @bind="Price">
-            <input placeholder="Email" @bind="Email">
             <button @onclick="addListing" class="add-listing">Add Listing</button>
         </div>
 
@@ -68,13 +67,16 @@ else
     </div>
 }
 
+<div>
+    <button @onclick="logout" class="delete-button">Logout</button>
+</div>
+
 @code {
     private List<Listing> listings = new();
     private Listing currListing;
     private bool toDelete = false;
     private string Name;
     private int Price;
-    private string Email;
 
     protected override void OnInitialized()
     {
@@ -112,14 +114,14 @@ else
     {
         try
         {
-            if (currListing != null)
+            if (currListing != null && currListing.user == AuthService.currUser)
             {
                 DbContext.Listings.Remove(currListing);
                 DbContext.SaveChanges();
                 listings.Remove(currListing);
-                currListing = null;
             }
             
+            currListing = null;
             toDelete = false;
         }
         catch (Exception ex)
@@ -135,7 +137,7 @@ else
             if (currListing != null)
             {
                 var listingName = currListing.name;
-                var listingEmail = currListing.email;
+                var listingEmail = currListing.user.email;
                 NavigationManager.NavigateTo($"/confirmation/{listingName}/{listingEmail}");
                 deleteListing();
             }
@@ -148,12 +150,12 @@ else
     private void addListing() {
         try
         {
-            if (!string.IsNullOrWhiteSpace(Name) && Price > 0 && !string.IsNullOrWhiteSpace(Email)) {
+            if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
                 var newListing = new Listing
                 {
                     name = Name,
                     price = Price,
-                    email = Email
+                    user = AuthService.currUser
                 };
                 DbContext.Listings.Add(newListing);
                 DbContext.SaveChanges();
@@ -161,7 +163,6 @@ else
 
                 Name = string.Empty;
                 Price = 0;
-                Email = string.Empty;
             }
         }
         catch (Exception ex)
@@ -169,5 +170,10 @@ else
             Console.WriteLine($"Error adding listing: {ex.Message}");
             Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
         }
+    }
+
+    private void logout() {
+        AuthService.Logout();
+        NavigationManager.NavigateTo("/login");
     }
 }

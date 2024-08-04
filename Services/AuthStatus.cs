@@ -1,6 +1,7 @@
 public class AuthStatus
 {
     public bool IsAuthenticated { get; set; } = false;
+    public User currUser {get; set; }
 
     public void Login()
     {
@@ -10,5 +11,6 @@ public class AuthStatus
     public void Logout()
     {
         IsAuthenticated = false;
+        currUser = null;
     }
 }
