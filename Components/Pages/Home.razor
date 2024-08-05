@@ -5,7 +5,6 @@
 @inject AuthStatus AuthService
 @using Microsoft.EntityFrameworkCore
 
-
 <PageTitle>Home</PageTitle>
 
 @if (!AuthService.IsAuthenticated)
@@ -38,8 +37,8 @@ else
                             <span class="listing-price">$@(listing.price).00</span>
                         </div>
                         <!-- Giving option for purchasing or deleting each listing -->
-                        <button @onclick="() => purchaseListing(listing)" class="purchase-button">Purchase</button>
-                        <button @onclick="() => removeListing(listing)" class="delete-button">Delete</button>
+                        <button @onclick="() => purchaseListing(listing.id)" class="purchase-button">Purchase</button>
+                        <button @onclick="() => removeListing(listing.id)" class="delete-button">Delete</button>
                     </li>
                 }
             }
@@ -79,61 +78,64 @@ else
     private bool toDelete = false;
     private string Name;
     private int Price;
-    private bool Purchased = false;
 
     protected override void OnInitialized()
-{
-    try
     {
-        listings = DbContext.Listings.Include(l => l.user).ToList();
+        try
+        {
+            // Eager loading 
+            listings = DbContext.Listings.Include(l => l.user).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading listings: {ex.Message}");
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error loading listings: {ex.Message}");
-    }
-}
-
 
     private void cancelSelection() {
+        // Clearing the fields
         currListing = null;
         toDelete = false;
     }
 
-    private void removeListing(Listing listing) {
-        findListing(listing);
+    private void removeListing(int listingId) {
+        // if toDelete is true then it will prompt you to confirm deletion
+        findListing(listingId);
         toDelete = true;
     }
 
-    private void purchaseListing(Listing listing) {
-        findListing(listing);
-        Console.WriteLine(currListing.user);
+    private void purchaseListing(int listingId) {
+        // if toDelete is false then it will prompt you to confirm purchase
+        // if and only if currListing is also not null
+        findListing(listingId);
         toDelete = false;
     }
 
-    private void findListing(Listing listing)
+    private void findListing(int listingId)
     {
-        currListing = listing;
+        // Setting currListing to the current Listing object in the database
+        currListing = DbContext.Listings.Include(l => l.user).FirstOrDefault(l => l.id == listingId);
     }
 
     private void deleteListing()
     {
         try
         {
-            if (Purchased) {
-                DbContext.Listings.Remove(currListing);
-                DbContext.SaveChanges();
-                listings.Remove(currListing);
-                Purchased = false;
-            }
-            if (currListing != null && currListing.user == AuthService.currUser)
+            // Retrieving current user from db instead of using AuthService.currUser to prevent db tracking issues
+            var User = DbContext.Users.FirstOrDefault(u => u.id == AuthService.currUser.id);
+
+            // Bounds checking and ensuring only listing owner can delete their listing
+            if (currListing != null && currListing.user == User)
             {
+                // Removing record from database and updating database
                 DbContext.Listings.Remove(currListing);
                 DbContext.SaveChanges();
                 listings.Remove(currListing);
+
+                // Clearing the fields
+                currListing = null;
+                toDelete = false;
             }
-            
-            currListing = null;
-            toDelete = false;
         }
         catch (Exception ex)
         {
@@ -142,73 +144,76 @@ else
     }
 
     private void confirmPurchase()
-{
-    try
     {
-        Console.WriteLine(currListing.user);
-        if (currListing != null)
+        try
         {
-            if (currListing.user != null)
+            // Bounds checking
+            if (currListing != null && currListing.user != null)
             {
+                // Retrieving current listing name and email for confirmation page display
                 var listingName = currListing.name;
                 var listingEmail = currListing.user.email;
+
+                // Navigate user to confirmation page and pass the listing name and email as parameters
                 NavigationManager.NavigateTo($"/confirmation/{listingName}/{listingEmail}");
-                Purchased = true;
-                deleteListing();
             }
             else
             {
                 Console.WriteLine("Error: The listing has no associated user.");
             }
         }
-        else
-        {
-            Console.WriteLine("Error: No listing selected.");
+        catch (Exception ex) {
+            Console.WriteLine($"Error confirming purchase: {ex.Message}");
         }
     }
-    catch (Exception ex) {
-        Console.WriteLine($"Error confirming purchase: {ex.Message}");
-    }
-}
-
 
     private void addListing() {
-    try
-    {
-        if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
-            // Retrieve the current user from the database to ensure it's the same instance
-            var user = DbContext.Users.FirstOrDefault(u => u.id == AuthService.currUser.id);
-            if (user == null)
-            {
-                Console.WriteLine("Error: Current user not found.");
-                return;
+        try
+        {
+            // Bounds checking
+            if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
+                
+                // Retrieving user from database rather than just using AuthService.currUser
+                // This prevents database tracking conflicts that were happening earlier
+                var User = DbContext.Users.FirstOrDefault(u => u.id == AuthService.currUser.id);
+                
+                // Bounds checking
+                if (User == null)
+                {
+                    Console.WriteLine("Error: Current user not found.");
+                    return;
+                }
+                
+                // Creating new Listing object
+                var newListing = new Listing
+                {
+                    name = Name,
+                    price = Price,
+                    user = User
+                };
+
+                // Storing new Listing object in database
+                DbContext.Listings.Add(newListing);
+                DbContext.SaveChanges();
+                listings.Add(newListing);
+
+                // Clearing the fields
+                Name = string.Empty;
+                Price = 0;
             }
-
-            var newListing = new Listing
-            {
-                name = Name,
-                price = Price,
-                user = user
-            };
-
-            DbContext.Listings.Add(newListing);
-            DbContext.SaveChanges();
-            listings.Add(newListing);
-
-            Name = string.Empty;
-            Price = 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding listing: {ex.Message}");
         }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error adding listing: {ex.Message}");
-        Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
-    }
-}
-
 
     private void logout() {
+        
+        // Setting AuthService.currUser to null and AuthService.isAuthenticated to false
         AuthService.Logout();
+
+        // Navigating user back to login page
         NavigationManager.NavigateTo("/login");
     }
 }
