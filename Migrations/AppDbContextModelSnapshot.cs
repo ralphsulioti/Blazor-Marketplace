@@ -42,7 +42,7 @@ namespace Marketplace.Migrations
 
                     b.HasIndex("userid");
 
-                    b.ToTable("Listings");
+                    b.ToTable("Listings", (string)null);
                 });
 
             modelBuilder.Entity("User", b =>
@@ -67,7 +67,7 @@ namespace Marketplace.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Listing", b =>

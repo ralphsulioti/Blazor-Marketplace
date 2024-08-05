@@ -22,6 +22,20 @@ else
         <div>
             <input placeholder="Name" @bind="Name">
             <input placeholder="Price" type="number" @bind="Price">
+            <!-- Dropdown for categories -->
+            <select @bind="Category">
+                <option value="">Select a category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home Goods">Home Goods</option>
+                <option value="Gifts">Gifts</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Athletics">Athletics</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+
             <button @onclick="addListing" class="add-listing">Add Listing</button>
         </div>
 
@@ -78,6 +92,7 @@ else
     private bool toDelete = false;
     private string Name;
     private int Price;
+    private string Category;
 
     protected override void OnInitialized()
     {
@@ -190,7 +205,8 @@ else
                 {
                     name = Name,
                     price = Price,
-                    user = User
+                    user = User,
+                    category = Category
                 };
 
                 // Storing new Listing object in database
@@ -201,6 +217,7 @@ else
                 // Clearing the fields
                 Name = string.Empty;
                 Price = 0;
+                Category = "";
             }
         }
         catch (Exception ex)
