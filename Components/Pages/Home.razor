@@ -37,7 +37,7 @@ else
                             <span class="listing-price">$@(listing.price).00</span>
                         </div>
                         <!-- Giving option for purchasing or deleting each listing -->
-                        <button @onclick="() => purchaseListing(listing.id)" class="purchase-button">Purchase</button>
+                        <button @onclick="() => purchaseListing(listing.id)" class="purchase-button">Interested</button>
                         <button @onclick="() => removeListing(listing.id)" class="delete-button">Delete</button>
                     </li>
                 }
@@ -51,7 +51,7 @@ else
         <!-- Confirm Delete -->
         @if (currListing != null && toDelete == true)
         {
-            <p> Selected listing for deletion: @currListing.name</p>
+            <p>Selected listing for deletion: @currListing.name</p>
             <p>Are you sure you want to delete @currListing.name?</p>
             <button @onclick="deleteListing" class="delete-button">Confirm</button>
             <button @onclick="cancelSelection" class="purchase-button">Cancel</button>
@@ -60,8 +60,8 @@ else
         <!-- Confirm Purchase  -->
         @if (currListing != null && toDelete == false)
         {
-            <p> Selected listing for purchase: @currListing.name</p>
-            <p>Are you sure you want to purchase @currListing.name?</p>
+            <p>Interested in selected listing: @currListing.name</p>
+            <p>Are you sure you want to express interest in: @currListing.name?</p>
             <button @onclick="confirmPurchase" class="purchase-button">Confirm</button>
             <button @onclick="cancelSelection" class="delete-button">Cancel</button>
         }
@@ -131,11 +131,12 @@ else
                 DbContext.Listings.Remove(currListing);
                 DbContext.SaveChanges();
                 listings.Remove(currListing);
-
-                // Clearing the fields
-                currListing = null;
-                toDelete = false;
             }
+
+            // Clearing the fields 
+            // Note: clear the fields no matter what so the confirmation prompt goes away if user is unauthorized
+            currListing = null;
+            toDelete = false;
         }
         catch (Exception ex)
         {
