@@ -16,7 +16,6 @@
 <button @onclick="HandleRegister" class="purchase-button">Create Account</button>
 
 @code {
-    //private List<User> users = new();
     private string Username { get; set; }
     private string Password { get; set; }
     private string Email { get; set; }
@@ -51,7 +50,6 @@
             //}
         }
         catch (Exception ex) {
-            // Log the exception (e.g., to a file or console)
             Console.WriteLine($"Error creating user: {ex.Message}");
         }
     }
@@ -69,7 +67,6 @@
             }
         }
         catch (Exception ex) {
-            // Log the exception (e.g., to a file or console)
             Console.WriteLine($"Error during login: {ex.Message}");
         }
     }
