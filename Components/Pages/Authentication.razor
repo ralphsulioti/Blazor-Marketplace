@@ -24,14 +24,14 @@
     private void HandleRegister() {
         Console.WriteLine($"Username: {Username}, Email: {Email}");
         try {
-            //if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)) {
-                //if (DbContext.Users.Any(u => u.username == Username)) {
-                  //  Console.WriteLine("Username already in use, pick a different one");
-                //}
-                //else if (DbContext.Users.Any(u => u.email == Email)) {
-                //    Console.WriteLine("Email already in use, pick a different one.");
-                //}
-                //else {
+            if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)) {
+                if (DbContext.Users.Any(u => u.username == Username)) {
+                    Console.WriteLine("Username already in use, pick a different one");
+                }
+                else if (DbContext.Users.Any(u => u.email == Email)) {
+                    Console.WriteLine("Email already in use, pick a different one.");
+                }
+                else {
                     var newUser = new User {
                         username = Username,
                         password = Password,
@@ -39,15 +39,14 @@
                     };
                     DbContext.Users.Add(newUser);
                     DbContext.SaveChanges();
-                    //users.Add(newUser);
                     
                     Username = string.Empty;
                     Password = string.Empty;
                     Email = string.Empty;
 
                     NavigationManager.NavigateTo("/login");
-                //}
-            //}
+                }
+            }
         }
         catch (Exception ex) {
             Console.WriteLine($"Error creating user: {ex.Message}");
