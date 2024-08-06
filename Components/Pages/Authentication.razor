@@ -22,7 +22,6 @@
 
 
     private void HandleRegister() {
-        Console.WriteLine($"Username: {Username}, Email: {Email}");
         try {
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)) {
                 if (DbContext.Users.Any(u => u.username == Username)) {
