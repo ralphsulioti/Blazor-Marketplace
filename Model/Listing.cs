@@ -10,17 +10,21 @@ public class Listing {
     public int price {get; set;}
     [Required]
     public User user {get; set;}
+    [Required]
+    public string category {get; set; }
 
     public Listing() {
         name = "";
         price = 0;
         user = null;
+        category = "";
     }
 
-    public Listing(int ID, string Name, int Price, User User) {
+    public Listing(int ID, string Name, int Price, User User, string Category) {
         id = ID;
         name = Name;
         price = Price;
         user = User;
+        category = Category;
     }
 }

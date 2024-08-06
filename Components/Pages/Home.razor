@@ -22,21 +22,54 @@ else
         <div>
             <input placeholder="Name" @bind="Name">
             <input placeholder="Price" type="number" @bind="Price">
+            <!-- Dropdown for categories -->
+            <select @bind="Category">
+                <option value="">Select a category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home Goods">Home Goods</option>
+                <option value="Gifts">Gifts</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Athletics">Athletics</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+
             <button @onclick="addListing" class="add-listing">Add Listing</button>
         </div>
 
-        <!-- Displaying all listings -->
+        <!-- Make this right aligned -->
+        <div>
+            <p>Filter by </p>
+            <select @bind="filterCategory">
+                <option value="">None</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Books">Books</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Home Goods">Home Goods</option>
+                <option value="Gifts">Gifts</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Athletics">Athletics</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+
+            <button @onclick="filterByCategory">Filter</button>
+        </div>
+
+        <!-- Displaying filtered listings -->
         <ul class="listing-container">
-            @if (listings != null && listings.Any())
+            @if (filteredListings != null && filteredListings.Any())
             {
-                @foreach (var listing in listings)
+                @foreach (var listing in filteredListings)
                 {
                     <li class="listing-item">
                         <div class="listing-details">
                             <span class="listing-name">@listing.name</span>
                             <span class="listing-price">$@(listing.price).00</span>
                         </div>
-                        <!-- Giving option for purchasing or deleting each listing -->
+                        <!-- Option for purchasing or deleting each listing -->
                         <button @onclick="() => purchaseListing(listing.id)" class="purchase-button">Interested</button>
                         <button @onclick="() => removeListing(listing.id)" class="delete-button">Delete</button>
                     </li>
@@ -47,6 +80,7 @@ else
                 <li>No Listings Available</li>
             }
         </ul>
+
 
         <!-- Confirm Delete -->
         @if (currListing != null && toDelete == true)
@@ -74,10 +108,13 @@ else
 
 @code {
     private List<Listing> listings = new();
+    private List<Listing> filteredListings = new();
     private Listing currListing;
     private bool toDelete = false;
     private string Name;
     private int Price;
+    private string Category;
+    private string filterCategory;
 
     protected override void OnInitialized()
     {
@@ -85,6 +122,7 @@ else
         {
             // Eager loading 
             listings = DbContext.Listings.Include(l => l.user).ToList();
+            filteredListings = listings;
         }
         catch (Exception ex)
         {
@@ -190,7 +228,8 @@ else
                 {
                     name = Name,
                     price = Price,
-                    user = User
+                    user = User,
+                    category = Category
                 };
 
                 // Storing new Listing object in database
@@ -201,6 +240,7 @@ else
                 // Clearing the fields
                 Name = string.Empty;
                 Price = 0;
+                Category = "";
             }
         }
         catch (Exception ex)
@@ -209,6 +249,20 @@ else
         }
     }
 
+    private void filterByCategory() {
+        try 
+        {
+            if (string.IsNullOrWhiteSpace(filterCategory)) {
+                filteredListings = listings;
+            }
+            else {
+                filteredListings = listings.FindAll(l=> l.category == filterCategory);
+            }
+        } catch (Exception ex)
+        {
+            Console.WriteLine($"Error filtering listings: {ex.Message}");
+        }
+    }
     private void logout() {
         
         // Setting AuthService.currUser to null and AuthService.isAuthenticated to false
