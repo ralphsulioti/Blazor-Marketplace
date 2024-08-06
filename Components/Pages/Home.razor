@@ -39,24 +39,25 @@ else
             <button @onclick="addListing" class="add-listing">Add Listing</button>
         </div>
 
-        <!-- Make this right aligned -->
-        <div>
-            <p>Filter by </p>
-            <select @bind="filterCategory">
-                <option value="">None</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Books">Books</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Home Goods">Home Goods</option>
-                <option value="Gifts">Gifts</option>
-                <option value="Leisure">Leisure</option>
-                <option value="Kitchen">Kitchen</option>
-                <option value="Athletics">Athletics</option>
-                <option value="Miscellaneous">Miscellaneous</option>
-            </select>
-
-            <button @onclick="filterByCategory">Filter</button>
+        <div class="filter-block">
+        <div class="filter-container">
+                <p>Filter by</p>
+                <select @bind="filterCategory" class="filter-dropdown">
+                    <option value="">None</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Books">Books</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Home Goods">Home Goods</option>
+                    <option value="Gifts">Gifts</option>
+                    <option value="Leisure">Leisure</option>
+                    <option value="Kitchen">Kitchen</option>
+                    <option value="Athletics">Athletics</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                </select>
+                <button @onclick="filterByCategory" class="filter-button">Filter</button>
+            </div>
         </div>
+
 
         <!-- Displaying filtered listings -->
         <ul class="listing-container">
@@ -245,7 +246,7 @@ else
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error adding listing: {ex.Message}");
+            Console.WriteLine($"Error adding listing: {ex}");
         }
     }
 
