@@ -19,6 +19,7 @@ C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\n
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
@@ -33,6 +34,7 @@ C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\n
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.CodeDom.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.Composition.AttributedModel.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.Composition.Convention.dll
@@ -47,6 +49,10 @@ C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\n
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.Security.Permissions.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\xunit.abstractions.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\xunit.assert.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\xunit.core.dll
+C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\xunit.execution.dotnet.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\ralph\Documents\VSCode\sampleBlazor\Marketplace\Marketplace\bin\Debug\net8.0\es\Microsoft.CodeAnalysis.resources.dll
