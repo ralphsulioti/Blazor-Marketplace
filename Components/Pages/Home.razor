@@ -22,9 +22,9 @@ else
         <div>
             <input placeholder="Name" @bind="Name">
             <input placeholder="Price" type="number" @bind="Price">
-            <!-- Dropdown for categories -->
+            <!-- Dropdown for categories selection -->
             <select @bind="Category">
-                <option value="">Select a category</option>
+                <option value="Miscellaneous">Miscellaneous</option>
                 <option value="Electronics">Electronics</option>
                 <option value="Books">Books</option>
                 <option value="Clothing">Clothing</option>
@@ -33,7 +33,6 @@ else
                 <option value="Leisure">Leisure</option>
                 <option value="Kitchen">Kitchen</option>
                 <option value="Athletics">Athletics</option>
-                <option value="Miscellaneous">Miscellaneous</option>
             </select>
 
             <button @onclick="addListing" class="add-listing">Add Listing</button>
@@ -156,7 +155,7 @@ else
         currListing = DbContext.Listings.Include(l => l.user).FirstOrDefault(l => l.id == listingId);
     }
 
-    private void deleteListing()
+    private async Task deleteListing()
     {
         try
         {
@@ -168,7 +167,18 @@ else
             {
                 // Removing record from database and updating database
                 DbContext.Listings.Remove(currListing);
-                DbContext.SaveChanges();
+                try
+                {
+                    // Your code to delete or add a listing
+                    await DbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var innerException = ex.InnerException?.Message;
+                    Console.WriteLine($"Error modifying database: {innerException}");
+                }
+
+                //DbContext.SaveChanges();
                 listings.Remove(currListing);
             }
 
@@ -207,7 +217,7 @@ else
         }
     }
 
-    private void addListing() {
+    private async Task addListing() {
         try
         {
             // Bounds checking
@@ -235,6 +245,12 @@ else
 
                 // Storing new Listing object in database
                 DbContext.Listings.Add(newListing);
+                try {
+                    await DbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex){
+                    Console.WriteLine($"Error updating database: {ex.Message}");
+                }
                 DbContext.SaveChanges();
                 listings.Add(newListing);
 
