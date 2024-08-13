@@ -21,7 +21,7 @@
     private string Email { get; set; }
 
 
-    private void HandleRegister() {
+    private async Task HandleRegister() {
         try {
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email)) {
                 if (DbContext.Users.Any(u => u.username == Username)) {
@@ -37,7 +37,12 @@
                         email = Email
                     };
                     DbContext.Users.Add(newUser);
-                    DbContext.SaveChanges();
+                    try {
+                        await DbContext.SaveChangesAsync();
+                    } catch (DbUpdateException ex) {
+                        Console.WriteLine($"Error updating database: {ex.Message}");
+                    }
+                    
                     
                     Username = string.Empty;
                     Password = string.Empty;
