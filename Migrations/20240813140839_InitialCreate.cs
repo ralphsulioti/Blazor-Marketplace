@@ -33,7 +33,8 @@ namespace Marketplace.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     price = table.Column<int>(type: "int", nullable: false),
-                    userid = table.Column<int>(type: "int", nullable: false)
+                    userid = table.Column<int>(type: "int", nullable: false),
+                    category = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

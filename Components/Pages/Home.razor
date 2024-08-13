@@ -24,6 +24,7 @@ else
             <input placeholder="Price" type="number" @bind="Price">
             <!-- Dropdown for categories selection -->
             <select @bind="Category">
+                <option value="">Select Category</option>
                 <option value="Miscellaneous">Miscellaneous</option>
                 <option value="Electronics">Electronics</option>
                 <option value="Books">Books</option>
@@ -221,7 +222,7 @@ else
         try
         {
             // Bounds checking
-            if (!string.IsNullOrWhiteSpace(Name) && Price > 0) {
+            if (!string.IsNullOrWhiteSpace(Name) && Price > 0 && !string.IsNullOrEmpty(Category)) {
                 
                 // Retrieving user from database rather than just using AuthService.currUser
                 // This prevents database tracking conflicts that were happening earlier
